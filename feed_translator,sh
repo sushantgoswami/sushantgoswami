@@ -1,4 +1,3 @@
-[root@instance-1 bash_scripts]# cat feed_translater.sh
 #!/bin/bash
 
 if [ -z $1 ]; then
@@ -21,29 +20,44 @@ if [ $1 == "process" ]; then
   echo "all variables not present"
  else
   ##==========================================##
+
   LANGUAGE_CODE=$2
   SOURCE_PATH=$3
   DESTINATION_PATH=$4
 
-  field01=`cat $SOURCE_PATH | cut -d "," -f1`
-  field02=`cat $SOURCE_PATH | cut -d "," -f2`
-  field03=`cat $SOURCE_PATH | cut -d "," -f3`
-  field04=`cat $SOURCE_PATH | cut -d "," -f4`
-  field05=`cat $SOURCE_PATH | cut -d "," -f5`
-  field06=`cat $SOURCE_PATH | cut -d "," -f6`
-  field07=`cat $SOURCE_PATH | cut -d "," -f7`
-  field08=`cat $SOURCE_PATH | cut -d "," -f8`
-  field09=`cat $SOURCE_PATH | cut -d "," -f9`
-  field10=`cat $SOURCE_PATH | cut -d "," -f10`
-  field11=`cat $SOURCE_PATH | cut -d "," -f11`
-  field12=`cat $SOURCE_PATH | cut -d "," -f12`
-  field13=`cat $SOURCE_PATH | cut -d "," -f13`
-  field14=`cat $SOURCE_PATH | cut -d "," -f14`
+  /usr/bin/tail -n +2 $SOURCE_PATH > /tmp/product-feed_dk_654321.csv
 
-  trans -brief -no-auto :$LANGUAGE_CODE "$field03"
-  ##==========================================##
+  >$DESTINATION_PATH
+  echo "ID,EAN,title,color,gender,mrp,product_discount,price,link,image_link,availability,brand,category,shipping" > $DESTINATION_PATH
+
+  while IFS= read -r line
+  do
+  field01=`/bin/echo $line | cut -d "," -f1`
+  field02=`/bin/echo $line | cut -d "," -f2`
+  field03=`/bin/echo $line | cut -d "," -f3`
+  field04=`/bin/echo $line | cut -d "," -f4`
+  field05=`/bin/echo $line | cut -d "," -f5`
+  field06=`/bin/echo $line | cut -d "," -f6`
+  field07=`/bin/echo $line | cut -d "," -f7`
+  field08=`/bin/echo $line | cut -d "," -f8`
+  field09=`/bin/echo $line | cut -d "," -f9`
+  field10=`/bin/echo $line | cut -d "," -f10`
+  field11=`/bin/echo $line | cut -d "," -f11`
+  field12=`/bin/echo $line | cut -d "," -f12`
+  field13=`/bin/echo $line | cut -d "," -f13`
+  field14=`/bin/echo $line | cut -d "," -f14`
+
+  field03_tr=`/usr/local/bin/trans -brief -no-auto :$LANGUAGE_CODE "$field03"`
+  field04_tr=`/usr/local/bin/trans -brief -no-auto :$LANGUAGE_CODE "$field04"`
+  field05_tr=`/usr/local/bin/trans -brief -no-auto :$LANGUAGE_CODE "$field05"`
+  field13_tr=`/usr/local/bin/trans -brief -no-auto :$LANGUAGE_CODE "$field13"`
+
+  /bin/echo "$field01,$field02,$field03_tr,$field04_tr,$field05_tr,$field06,$field07,$field08,$field09,$field10,$field11,$field12,$field13_tr,$field14" >> $DESTINATION_PATH
+  done < /tmp/product-feed_dk_654321.csv
+
+  ##================================##
  fi
 fi
 
 fi
-[root@instance-1 bash_scripts]#
+

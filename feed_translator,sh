@@ -1,0 +1,49 @@
+[root@instance-1 bash_scripts]# cat feed_translater.sh
+#!/bin/bash
+
+if [ -z $1 ]; then
+ echo "command line syntax: ./feed_translater.sh process [LANGUAGE CODE] [SOURCE PATH OF FILE] [DESTINATION PATH OF FILE]"
+fi
+
+if [ ! -z $1 ]; then
+
+if [ $1 == "help" ]; then
+ echo "command line syntax: ./feed_translater.sh process [LANGUAGE CODE] [SOURCE PATH OF FILE] [DESTINATION PATH OF FILE]"
+fi
+
+if [ $1 == "refrence" ]; then
+ /usr/local/bin/trans -reference
+fi
+
+
+if [ $1 == "process" ]; then
+ if [ -z $2 ] || [ -z $3 ] || [ -z $4 ]; then
+  echo "all variables not present"
+ else
+  ##==========================================##
+  LANGUAGE_CODE=$2
+  SOURCE_PATH=$3
+  DESTINATION_PATH=$4
+
+  field01=`cat $SOURCE_PATH | cut -d "," -f1`
+  field02=`cat $SOURCE_PATH | cut -d "," -f2`
+  field03=`cat $SOURCE_PATH | cut -d "," -f3`
+  field04=`cat $SOURCE_PATH | cut -d "," -f4`
+  field05=`cat $SOURCE_PATH | cut -d "," -f5`
+  field06=`cat $SOURCE_PATH | cut -d "," -f6`
+  field07=`cat $SOURCE_PATH | cut -d "," -f7`
+  field08=`cat $SOURCE_PATH | cut -d "," -f8`
+  field09=`cat $SOURCE_PATH | cut -d "," -f9`
+  field10=`cat $SOURCE_PATH | cut -d "," -f10`
+  field11=`cat $SOURCE_PATH | cut -d "," -f11`
+  field12=`cat $SOURCE_PATH | cut -d "," -f12`
+  field13=`cat $SOURCE_PATH | cut -d "," -f13`
+  field14=`cat $SOURCE_PATH | cut -d "," -f14`
+
+  trans -brief -no-auto :$LANGUAGE_CODE "$field03"
+  ##==========================================##
+ fi
+fi
+
+fi
+[root@instance-1 bash_scripts]#

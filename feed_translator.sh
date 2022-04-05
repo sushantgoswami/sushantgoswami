@@ -2,6 +2,7 @@
 
 if [ -z $1 ]; then
  echo "command line syntax: ./feed_translater.sh process [LANGUAGE CODE] [SOURCE PATH OF FILE] [DESTINATION PATH OF FILE]"
+ exit 0;
 fi
 
 if [ ! -z $1 ]; then
@@ -24,11 +25,14 @@ if [ $1 == "process" ]; then
   LANGUAGE_CODE=$2
   SOURCE_PATH=$3
   DESTINATION_PATH=$4
+  cp $SOURCE_PATH /tmp/feed_translater_source_aa55.csv
 
-  /usr/bin/tail -n +2 $SOURCE_PATH > /tmp/product-feed_dk_654321.csv
+  FIRST_LINE=`head -1 /tmp/feed_translater_source_aa55.csv`
+
+  /usr/bin/tail -n +2 /tmp/feed_translater_source_aa55.csv > /tmp/feed_translater_source_55aa.csv
 
   >$DESTINATION_PATH
-  echo "ID,EAN,title,color,gender,mrp,product_discount,price,link,image_link,availability,brand,category,shipping" > $DESTINATION_PATH
+  echo "$FIRST_LINE" > $DESTINATION_PATH
 
   while IFS= read -r line
   do
@@ -53,11 +57,10 @@ if [ $1 == "process" ]; then
   field13_tr=`/usr/local/bin/trans -brief -no-auto :$LANGUAGE_CODE "$field13"`
 
   /bin/echo "$field01,$field02,$field03_tr,$field04_tr,$field05_tr,$field06,$field07,$field08,$field09,$field10,$field11,$field12,$field13_tr,$field14" >> $DESTINATION_PATH
-  done < /tmp/product-feed_dk_654321.csv
+  done < /tmp/feed_translater_source_55aa.csv
 
   ##================================##
  fi
 fi
 
 fi
-
